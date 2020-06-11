@@ -56,7 +56,7 @@ public class LongPictureCreate extends View {
 
     // 被认定为长图的长宽比
     private int maxSingleImageRatio = 3;
-    private Bitmap buttomUrl;
+    private Bitmap buttomBitmap;
 
     public LongPictureCreate(Context context) {
         super(context);
@@ -220,7 +220,7 @@ public class LongPictureCreate extends View {
         // 计算出最终生成的长图的高度 = 上、中、图片总高度、下等个个部分加起来
         int allBitmapHeight = 0;
 
-        Bitmap last = Bitmap.createScaledBitmap(buttomUrl, longPictureWidth - 2*picMargin,buttomUrl.getHeight(),false);
+        Bitmap last = Bitmap.createScaledBitmap(buttomBitmap, longPictureWidth - 2*picMargin,buttomBitmap.getHeight(),false);
 
         // 计算图片的总高度
         if (imageUrlList != null & imageUrlList.size() > 0) {
@@ -261,58 +261,64 @@ public class LongPictureCreate extends View {
             }
         }
         top = getAllTopHeightWithIndex(imageUrlList.size() - 1 );
+        last.setDensity(bitmapAll.getDensity());
         //getAllTopHeightWithIndex(imageUrlList.size()+1 )
         canvas.drawBitmap(last, picMargin, top, paint);
 
         // 生成最终的文件，并压缩大小，这里使用的是：implementation 'com.github.nanchen2251:CompressHelper:1.0.5'
         try {
             String path = ImageUtil.saveBitmapBackPath(bitmapAll);
-            float imageRatio = ImageUtil.getImageRatio(path);
-            // 最终压缩后的长图宽度
-            int finalCompressLongPictureWidth;
-            if (imageRatio >= 10) {
-                finalCompressLongPictureWidth = 750;
-            } else if (imageRatio >= 5 && imageRatio < 10) {
-                finalCompressLongPictureWidth = 900;
-            } else {
-                finalCompressLongPictureWidth = longPictureWidth;
-            }
-            String result;
-            // 由于长图一般比较大，所以压缩时应注意OOM的问题，这里并不处理OOM问题，请自行解决。
-            try {
-                result = new CompressHelper.Builder(context).setMaxWidth(finalCompressLongPictureWidth)
-                    .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                    .setQuality(80)    // 默认压缩质量为80
-                    .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
-                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+ "/长图分享/")
-                    .build()
-                    .compressToFile(new File(path))
-                    .getAbsolutePath();
-            } catch (OutOfMemoryError e) {
-                e.printStackTrace();
-
-                finalCompressLongPictureWidth = finalCompressLongPictureWidth / 2;
-                result = new CompressHelper.Builder(context).setMaxWidth(finalCompressLongPictureWidth)
-                    .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                    .setQuality(50)    // 默认压缩质量为80
-                    .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
-                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                            + "/长图分享/")
-                    .build()
-                    .compressToFile(new File(path))
-                    .getAbsolutePath();
-            }
-            Log.d(TAG, "最终生成的长图路径为：" + result);
+            //保存图片到本地
+            savePicLocal(path);
+            Log.d(TAG, "最终生成的长图路径为：" + path);
             if (listener != null) {
-                listener.onSuccess(result);
+                listener.onSuccess(path);
             }
         } catch (IOException e) {
             e.printStackTrace();
             if (listener != null) {
                 listener.onFail();
             }
+        }
+    }
+
+    private void savePicLocal(String path) {
+        float imageRatio = ImageUtil.getImageRatio(path);
+        // 最终压缩后的长图宽度
+        int finalCompressLongPictureWidth;
+        if (imageRatio >= 10) {
+            finalCompressLongPictureWidth = 750;
+        } else if (imageRatio >= 5 && imageRatio < 10) {
+            finalCompressLongPictureWidth = 900;
+        } else {
+            finalCompressLongPictureWidth = longPictureWidth;
+        }
+        String result;
+//             由于长图一般比较大，所以压缩时应注意OOM的问题，这里并不处理OOM问题，请自行解决。
+        try {
+            result = new CompressHelper.Builder(context).setMaxWidth(finalCompressLongPictureWidth)
+                .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
+                .setQuality(80)    // 默认压缩质量为80
+                .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
+                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+ "/长图分享/")
+                .build()
+                .compressToFile(new File(path))
+                .getAbsolutePath();
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+
+            finalCompressLongPictureWidth = finalCompressLongPictureWidth / 2;
+            result = new CompressHelper.Builder(context).setMaxWidth(finalCompressLongPictureWidth)
+                .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
+                .setQuality(50)    // 默认压缩质量为80
+                .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
+                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                        + "/长图分享/")
+                .build()
+                .compressToFile(new File(path))
+                .getAbsolutePath();
         }
     }
 
@@ -342,8 +348,8 @@ public class LongPictureCreate extends View {
         return result;
     }
 
-    public void setButtomUrl(Bitmap buttomUrl) {
-        this.buttomUrl = buttomUrl;
+    public void setbuttomBitmap(Bitmap buttomBitmap) {
+        this.buttomBitmap = buttomBitmap;
     }
 
     public interface Listener {
