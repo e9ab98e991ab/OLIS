@@ -241,7 +241,7 @@ public class LongPictureCreate extends View {
             bitmapAll = Bitmap.createBitmap(longPictureWidth, allBitmapHeight, config);
         }
         Canvas canvas = new Canvas(bitmapAll);
-        canvas.drawColor(Color.BLACK);
+        canvas.drawColor(Color.WHITE);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
