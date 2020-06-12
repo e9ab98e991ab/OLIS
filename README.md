@@ -1,7 +1,7 @@
 ## OLIS（Create Long Image Synthesis)
 本项目是整理 处理多张图片合成并且加底部的示例
  
-<img src="https://github.com/e9ab98e991ab/OLIS/blob/master/image/bq30m-9tpyk.gif?raw=true"  width="360" height="640" align="bottom" />
+<img src="https://upload-images.jianshu.io/upload_images/1917623-bc8a2a616b217b7a.gif?imageMogr2/auto-orient/strip|imageView2/2/w/480/format/webp"  width="360" height="640" align="bottom" />
 
 
 
