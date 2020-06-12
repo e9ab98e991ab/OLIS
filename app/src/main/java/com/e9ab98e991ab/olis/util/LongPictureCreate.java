@@ -348,7 +348,7 @@ public class LongPictureCreate extends View {
         return result;
     }
 
-    public void setbuttomBitmap(Bitmap buttomBitmap) {
+    public void setButtomBitmap(Bitmap buttomBitmap) {
         this.buttomBitmap = buttomBitmap;
     }
 

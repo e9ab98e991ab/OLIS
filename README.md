@@ -1,4 +1,49 @@
-## 数据解析转换示例
+## OLIS（Create Long Image Synthesis)
 本项目是整理 处理多张图片合成并且加底部的示例  数据解析的API使用方法示例
  
-<img src="https://github.com/e9ab98e991ab/OLIS/blob/master/image/20200611144830.png?raw=true"  width="360" height="640" align="bottom" />
+<img src="https://github.com/e9ab98e991ab/OLIS/blob/master/image/bq30m-9tpyk.gif?raw=true"  width="360" height="640" align="bottom" />
+
+
+
+#### 使用方式
+
+```java
+LongPictureCreate drawLongPictureUtil = new LongPictureCreate(MainActivity.this);
+drawLongPictureUtil.setListener(new LongPictureCreate.Listener() {
+    @Override public void onSuccess(String path) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() { 
+                //合成长图路径
+            }
+        });
+    }
+
+    @Override public void onFail() {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                //合成失败回调
+            }
+        });
+    }
+});
+
+```
+
+调用方法
+
+```java
+drawLongPictureUtil.setbuttomBitmap(buttomBitmap);
+drawLongPictureUtil.setData('List<String>本地路径');
+drawLongPictureUtil.startDraw();
+```
+
+网络地址图片转换bitmap
+
+```
+Glide.with(this).asBitmap().load("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2800997457,1841442195&fm=26&gp=0.jpg").into(new SimpleTarget<Bitmap>() {
+    @Override
+    public void onResourceReady(@NonNull Bitmap buttomBitmap, @Nullable Transition<? super Bitmap> transition) {
+ 
+    }
+});
+```

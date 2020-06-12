@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
 
-                drawLongPictureUtil.setbuttomBitmap(resource);
+                drawLongPictureUtil.setButtomBitmap(resource);
                 drawLongPictureUtil.setData(mCurrentSelectedPath);
                 drawLongPictureUtil.startDraw();
             }
