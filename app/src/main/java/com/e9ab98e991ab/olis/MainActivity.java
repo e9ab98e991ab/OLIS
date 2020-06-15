@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 .isEnableCrop(true)// 是否裁剪 true or false
                 .maxSelectNum(10)// 最大图片选择数量 int
                 .minSelectNum(1)// 最小选择数量 int
+                .hideBottomControls(false)
                 .imageSpanCount(4)// 每行显示个数 int
                 .loadImageEngine(GlideEngine.createGlideEngine())
                 .selectionMode(PictureConfig.MULTIPLE)
